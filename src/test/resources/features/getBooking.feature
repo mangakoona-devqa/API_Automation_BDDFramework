@@ -7,12 +7,13 @@ Feature: Get booking details
     Then user should get the response code 200
 
   @getroomdetails
-  Scenario Outline: Validate booking details response codes
+  Scenario Outline: get booking by <description> → validate <expectedStatusCode> response
     Given user hits endpoint "<endpoint>"
     When asks the details of the room by room id <roomId>
     Then the response status code should be <expectedStatusCode>
 
     Examples:
-      | endpoint        | roomId | expectedStatusCode |
-      | api/booking     | 4213    | 200               |
-      | uuuuu           | 4213    | 404               |
+      | description           | endpoint    | roomId | expectedStatusCode |
+      | valid roomId          | api/booking | 4213   | 200                |
+      | invalid endpoint      | uuuuu       | 4213   | 404                |
+

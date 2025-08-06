@@ -7,7 +7,7 @@ Feature: Delete Booking Details
     Then user should get the response code 200
 
   @DeleteBookingPositiveFlow
-  Scenario Outline: Delete a booking
+  Scenario Outline: delete booking → validate 200 response
     Given user hits endpoint "api/booking"
     And user books the room with the given details
       | firstname   | lastname   | email   | phone   | checkin   | checkout   |

@@ -7,7 +7,7 @@ Feature: Edit Booking Details
     Then user should get the response code 200
 
   @EditBookingPositiveFlow
-  Scenario Outline: Edit the booking details dynamically
+  Scenario Outline: edit booking → validate 200 response
     Given user hits endpoint "api/booking/"
     And user books the room with the given details
       | firstname   | lastname   | email   | phone   | checkin   | checkout   |
