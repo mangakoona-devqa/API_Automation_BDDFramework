@@ -17,3 +17,13 @@ Feature: Get booking details
       | valid roomId          | api/booking | 4213   | 200                |
       | invalid endpoint      | uuuuu       | 4213   | 404                |
 
+
+  @invalidpassword
+  Scenario Outline: login with <description> → validate <expectedStatusCode> response
+    Given user hits endpoint "api/auth/login"
+    When user creates a auth token with login authentication as "<username>" and "<password>"
+    Then user should get the response code <expectedStatusCode>
+
+    Examples:
+      | description       | username | password     | expectedStatusCode |
+      | invalid password  | admin    | password123  | 401                |
