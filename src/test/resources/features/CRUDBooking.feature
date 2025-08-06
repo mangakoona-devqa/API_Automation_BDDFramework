@@ -7,7 +7,7 @@ Feature: End-to-End Booking Flow
     Then user should get the response code 200
 
   @EndToEndCRUD
-  Scenario Outline: Perform full booking lifecycle → create, retrieve, update, delete
+  Scenario Outline: CRUD Flow → create, retrieve, update, delete Booking
     Given user hits endpoint "api/booking"
     And user books the room with the given details
       | firstname   | lastname   | email   | phone   | checkin   | checkout   |

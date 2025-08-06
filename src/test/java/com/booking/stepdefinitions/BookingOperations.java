@@ -3,6 +3,7 @@ package com.booking.stepdefinitions;
 import static org.junit.Assert.assertEquals;
 import java.util.List;
 import java.util.Map;
+import io.restassured.module.jsv.JsonSchemaValidator;
 import org.json.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import base.BookingDates;
@@ -139,5 +140,13 @@ public class BookingOperations extends Utilities{
                 .when()
                 .get(bookingRequest.getEndPoint());
     }
+
+    @Then("validate the response with json schema {string}")
+    public void validate_the_response_with_json_schema(String schemaFileName) {
+        response.then()
+                .assertThat()
+                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schemas/" + schemaFileName));
+    }
+
 
 }
