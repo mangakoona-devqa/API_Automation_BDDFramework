@@ -1,27 +1,28 @@
 package base;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.List;
+import java.util.Random;
+import org.json.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
-import java.util.List;
-import java.util.Random;
-
-import static org.junit.Assert.assertEquals;
-
 public class Utilities {
-    ObjectMapper mapper;
-    String CONTENT_TYPE;
-    protected BookingRequest bookingRequest = new BookingRequest();
-    protected Response response;
 
+    ObjectMapper mapper;
+    protected BookingRequest bookingRequest = new BookingRequest();;
+    String CONTENT_TYPE;
+    protected Response response;
+    RequestSpecification requestSpecification;
+    JSONObject requestBody;
 
     public Utilities() {
         mapper = new ObjectMapper();
     }
-
 
     public String createRequestBody() throws JsonProcessingException {
         String requestbody = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(bookingRequest);
@@ -29,15 +30,19 @@ public class Utilities {
     }
 
     public RequestSpecification requestSetup() {
+
         RestAssured.baseURI = LoadProperties.getProperty("appURL");
         CONTENT_TYPE = LoadProperties.getProperty("content.type");
         return RestAssured.given().contentType(CONTENT_TYPE).accept(CONTENT_TYPE);
     }
 
     public String generateRandomRoomId() {
+
         final Random random = new Random();
-        return String.valueOf(3000 + random.nextInt(999));
+        return String.valueOf(2000 + random.nextInt(900));
+
     }
+
 
     public void validateBookingResponse(String firstname, String lastname, String checkin, String checkout,int roomid) {
 
@@ -54,4 +59,6 @@ public class Utilities {
         assertEquals("Check in date did not match", checkin, responseCheckin);
         assertEquals("Checkout date did not match", checkout, responseCheckout);
     }
+
+
 }

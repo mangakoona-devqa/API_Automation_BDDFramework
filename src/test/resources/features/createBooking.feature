@@ -23,7 +23,7 @@ Feature: Create Booking API
       | firstname   | lastname   | email   | phone   | checkin   | checkout   |
       | <firstname> | <lastname> | <email> | <phone> | <checkin> | <checkout> |
     Then the response status code should be 400
-    And the user should see response with error message "<FieldError>"
+    And the user should see response with incorrect "<FieldError>"
 
     Examples:
       | firstname | lastname | email               | phone         | checkin    | checkout   | FieldError                          |
