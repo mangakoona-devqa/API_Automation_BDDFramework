@@ -108,6 +108,27 @@ public class BookingOperations extends Utilities{
         assertEquals("Error message mismatch", errorMessage, actualErrorMessage.get(0));
     }
 
+    @When("the user edits the booking details")
+    public void theUserEditsTheBookingDetails(final DataTable dataTable) throws JsonProcessingException {
+        int roomid = Integer.parseInt(generateRandomRoomId());
+        dates = new BookingDates();
+        for (Map<String, String> data : dataTable.asMaps(String.class, String.class)) {
+            bookingRequest.setFirstname(data.get("firstname"));
+            bookingRequest.setLastname(data.get("lastname"));
+            dates.setCheckin(data.get("checkin"));
+            dates.setCheckout(data.get("checkout"));
+            bookingRequest.setBookingdates(dates);
+            bookingRequest.setRoomid(roomid);
+            bookingRequest.setDepositpaid(false);
+        }
 
+        response = requestSetup()
+                .body(createRequestBody())
+                .cookie("token", bookingRequest.getToken())
+                .when()
+                .put(bookingRequest.getEndPoint() + bookingId);
+
+
+    }
 
 }
