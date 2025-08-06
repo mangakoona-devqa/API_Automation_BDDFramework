@@ -17,7 +17,6 @@ Feature: Get booking details
       | valid roomId          | api/booking | 4213   | 200                |
       | invalid endpoint      | uuuuu       | 4213   | 404                |
 
-
   @invalidpassword
   Scenario Outline: login with <description> → validate <expectedStatusCode> response
     Given user hits endpoint "api/auth/login"
@@ -27,3 +26,9 @@ Feature: Get booking details
     Examples:
       | description       | username | password     | expectedStatusCode |
       | invalid password  | admin    | password123  | 401                |
+
+  @getroomavailability
+  Scenario: Get the details of the room availability
+    Given user hits endpoint "api/room"
+    When user requests the room availability details from "2025-08-17" to "2025-08-19" dates
+    Then the response status code should be 200

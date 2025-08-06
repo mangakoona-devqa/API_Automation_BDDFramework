@@ -130,5 +130,14 @@ public class BookingOperations extends Utilities{
 
 
     }
+    @When("user requests the room availability details from {string} to {string} dates")
+    public void user_requests_the_room_availability_details_from_to_dates(String checkin, String checkout) {
+        response = requestSetup()
+                .cookie(bookingRequest.getToken())
+                .param("checkin", checkin)
+                .param("checkin", checkout)
+                .when()
+                .get(bookingRequest.getEndPoint());
+    }
 
 }
