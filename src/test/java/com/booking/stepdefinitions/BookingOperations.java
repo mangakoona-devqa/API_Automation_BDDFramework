@@ -1,9 +1,9 @@
 package com.booking.stepdefinitions;
 
-import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
 import java.util.List;
 import java.util.Map;
+import org.json.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import base.BookingDates;
 import base.Utilities;
@@ -12,13 +12,10 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.response.Response;
-import org.json.JSONObject;
 
 
-public class BookingOperations extends Utilities  {
+public class BookingOperations extends Utilities{
 
-    public static Response response;
     BookingDates dates;
     int bookingId;
 
@@ -31,7 +28,7 @@ public class BookingOperations extends Utilities  {
     }
 
     @When("user books the room with the given details")
-    public void user_books_the_room_with_the_given_details(final DataTable dataTable) throws JsonProcessingException {
+    public void user_books_the_room_with_the_given_details(final DataTable dataTable) throws JsonProcessingException{
 
         int roomid = Integer.parseInt(generateRandomRoomId());
         dates = new BookingDates();
@@ -59,10 +56,9 @@ public class BookingOperations extends Utilities  {
         assertEquals(expectedStatusCode, response.getStatusCode());
     }
 
-    @And("the user should see response with incorrect {string}")
-    public void theUserShouldSeeTheResponseWithIncorrectField(final String errorMessage) {
-        List<String> actualErrorMessage = response.jsonPath().getList("errors");
-        assertEquals("Error message mismatch", errorMessage, actualErrorMessage.get(0));
+    @Then("user should get the response code {int}")
+    public void user_should_get_the_response_code(Integer statusCode) {
+        assertEquals(Long.valueOf(statusCode), Long.valueOf(response.getStatusCode()));
     }
 
     @When("user creates a auth token with login authentication as {string} and {string}")
@@ -76,9 +72,13 @@ public class BookingOperations extends Utilities  {
         bookingRequest.setToken(token);
     }
 
-    @Then("user should get the response code {int}")
-    public void user_should_get_the_response_code(Integer statusCode) {
-        assertEquals(Long.valueOf(statusCode), Long.valueOf(response.getStatusCode()));
+    @When("asks the details of the room by room id {int}")
+    public void asks_the_details_of_the_room_by_room_id(int roomid) {
+        response = requestSetup()
+                .cookie("token", bookingRequest.getToken())
+                .param("roomid", roomid)
+                .when()
+                .get(bookingRequest.getEndPoint());
     }
 
     @When("User requests the details of the room by room id")
@@ -101,6 +101,13 @@ public class BookingOperations extends Utilities  {
         response = requestSetup().cookie("token", bookingRequest.getToken()).when()
                 .delete(bookingRequest.getEndPoint() + fetchedBookingId);
     }
+
+    @And("the user should see response with incorrect {string}")
+    public void theUserShouldSeeTheResponseWithIncorrectField(final String errorMessage) {
+        List<String> actualErrorMessage = response.jsonPath().getList("errors");
+        assertEquals("Error message mismatch", errorMessage, actualErrorMessage.get(0));
+    }
+
 
 
 }
