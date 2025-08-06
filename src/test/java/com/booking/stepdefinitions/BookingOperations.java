@@ -13,14 +13,14 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
+import org.json.JSONObject;
 
 
 public class BookingOperations extends Utilities  {
 
     public static Response response;
-
     BookingDates dates;
-
+    int bookingId;
 
     public BookingOperations() {	}
 
@@ -65,6 +65,42 @@ public class BookingOperations extends Utilities  {
         assertEquals("Error message mismatch", errorMessage, actualErrorMessage.get(0));
     }
 
+    @When("user creates a auth token with login authentication as {string} and {string}")
+    public void user_creates_a_auth_token_with_login_authentication_as_and(String userName, String password) {
+        JSONObject loginAuth = new JSONObject();
+        loginAuth.put("username", userName);
+        loginAuth.put("password", password);
+        response = requestSetup().body(loginAuth.toString()).when()
+                .post(bookingRequest.getEndPoint());
+        String token = response.jsonPath().getString("token");
+        bookingRequest.setToken(token);
+    }
+
+    @Then("user should get the response code {int}")
+    public void user_should_get_the_response_code(Integer statusCode) {
+        assertEquals(Long.valueOf(statusCode), Long.valueOf(response.getStatusCode()));
+    }
+
+    @When("User requests the details of the room by room id")
+    public void User_requests_the_details_of_the_room_by_room_id() {
+
+        response = requestSetup()
+                .cookie("token", bookingRequest.getToken())
+                .param("roomid", bookingRequest.getRoomid())
+                .when()
+                .get(bookingRequest.getEndPoint());
+        bookingId = response.jsonPath().getInt("bookings[0].bookingid");
+        bookingRequest.setBookingId(bookingId);
+        System.out.println("Booking ID of the booked room = " + bookingId);
+        validateBookingResponse(bookingRequest.getFirstname() , bookingRequest.getLastname() , dates.getCheckin() , dates.getCheckout(), bookingRequest.getRoomid());
+    }
+    @When("the user deletes the booking with booking ID")
+    public void theUserDeletesTheBookingWithBookingID() {
+        System.out.println("fetchedBookingId = " + bookingRequest.getBookingId());
+        int fetchedBookingId = bookingRequest.getBookingId();
+        response = requestSetup().cookie("token", bookingRequest.getToken()).when()
+                .delete(bookingRequest.getEndPoint() + fetchedBookingId);
+    }
 
 
 }
