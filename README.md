@@ -1,55 +1,53 @@
-# Kata API Testing in Java
+# Rest API Automation Test Framework
 
-API Testing and Java Exercise: Setting up a Basic API Test Automation Framework.
+## Overview
+This is a Rest-Assured and Cucumber BDD-based test automation framework designed to test a Hotel Booking API. The framework supports dynamic request construction, schema validation, webhook simulation, and end-to-end CRUD scenarios.
 
-## Objective
-The objective of this exercise is to evaluate your knowledge on API testing and Java by setting up a basic API Test Automation framework using Rest-Assured and Cucumber. You will need to create a test suite that executes a few tests against one endpoint of a hotel booking website and evaluates their responses.
+ ## Key Features
+- Test automation framework designed for **Hotel Room Booking APIs**.
+- Built on **Cucumber BDD** .
+- Dynamic JSON request creation using **Jackson POJOs**.
+- Schema validation using `JsonSchemaValidator`.
+- **Swagger validation**: response is validated against the schema `getbookingresponseschema.json`.
+- **WireMock** integration: used to simulate and validate **webhook booking notifications**.
+- Utility class provides all reusable methods and configurations.
+- Logging is managed using `log4j`.
+  
+##  Prerequisites
 
-## Background
-The application under test is a simple hotel booking website where you can book a room and also send a form with a request.
+- Java 17+
+- Maven
+- IntelliJ IDEA or Eclipse (Cucumber & Maven plugins recommended)
+  
+## Installation
+Clone the repository: git clone https://github.com/mangakoona-devqa/API_Automation_BDDFramework.git
 
-The website can be accessed at https://automationintesting.online/.
+## How to Run the Tests
 
-The Swagger documentation for the two endpoints you will be testing can be found at:
+Update the tags value in the TestRunner.java file located at src/test/java/com.booking/TestRunner.java
+Update the tags = "@BookingAPI" and run using command mvn clean install.
+To execute specific test scenarios :@performschemavalidation , @EndToEndCRUD , @EditBooking , @BookingStub etc..
+---
+## CRUD Operations 
+- Covers Create, Retrieve, Update, and Delete booking scenarios.
+- Validates both positive flows (e.g., successful creation/deletion) and negative validations (e.g., invalid input, missing fields).
+- Ensures proper response codes and payload structures for each operation.
+##  Webhook & WireMock Integration
 
-Booking endpoint: https://automationintesting.online/booking/swagger-ui/index.html
-Optionally, you also have the Authentican endpoint: https://automationintesting.online/auth/swagger-ui/index.html
+- WireMock is used to simulate and validate webhook responses for booking events.
+- WireMock starts on port `9090`.
+- Supported Mock Tests:
+  - Webhook notification trigger and response validation.
+  - Mock booking POST calls and response body validations.
+  - Deleting mocked bookings using stubbed DELETE requests.
 
-## Task
-You are provided with an extremely basic API test project.
+## 🧾 JSON Schema Validation
 
-Please clone the project and create a new branch with your name. At the end, please push your branch to this project.
+The framework validates the response from booking API against the defined JSON Schema: `getbookingresponseschema.json` under `src/test/resources/schemas`.
 
-The project to start from, can be found here: https://github.com/freddyschoeters/API_Testing_kata
+## 📌 Notes
 
-Your task is to set up an API Test Automation framework from this project using Java, Rest-Assured, and Cucumber (feel free to add more dependencies if required).
-
-It is up to you to define the test cases. You don’t need to have a full coverage, but you need to show enough variation on the types of tests that you would need to write and execute, and what to check in the response.
-
-This kata has the purpose to evaluate both your technical skills as well as your testing skills.
-
-`For this task, you will use the booking endpoint.`
-
-
-## Requirements
-* Use Java as the programming language
-* Use Rest-Assured as the API testing library
-* Use Cucumber as the BDD framework
-* Design your codebase using a proper Java design pattern
-* Write good tests with correct checks
-* Use Git for version control and push your codebase to an open GitHub repository
-* Make regular commits to demonstrate your progress
-
-
-## Deliverables
-* Your branch pushed in the provided project.
-* A comprehensive test suite covering the scenarios mentioned above
-* A well-structured codebase with proper design patterns and comments
-* Regular commits demonstrating your progress
-
-## Evaluation Criteria
-* Being able to successfully run the tests
-* Correctness and completeness of the test suite
-* Quality of the codebase (design patterns, structure, code quality, …)
-* Use of Rest-Assured and Cucumber features
-* Commit history and progress demonstration
+- **WireMock** is conditionally initialized based on test tag `@webhooktests`.
+- **Swagger Schema Validation** helps contract testing by comparing API responses to a predefined schema.
+- You can run individual or grouped tests using tags to streamline test execution.
+- Ensure the endpoint URLs and schema paths are correctly configured in the `properties` file.
