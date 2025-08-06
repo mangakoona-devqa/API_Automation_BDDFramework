@@ -2,7 +2,7 @@
 Feature: Create Booking API
 
   @CreateBookingPositiveFlow
-  Scenario Outline: Successfully create a new booking
+  Scenario Outline: create a new booking-validate 200Response
     Given user hits endpoint "api/booking"
     When user books the room with the given details
       | firstname   | lastname   | email                   | phone       | checkin     | checkout    |

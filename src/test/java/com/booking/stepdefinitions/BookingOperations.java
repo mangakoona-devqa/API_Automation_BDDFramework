@@ -1,8 +1,12 @@
 package com.booking.stepdefinitions;
 
+import static io.restassured.RestAssured.given;
+import static org.junit.Assert.assertEquals;
+import java.util.List;
+import java.util.Map;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import base.BookingDates;
 import base.Utilities;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -10,10 +14,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
 
 public class BookingOperations extends Utilities  {
 
@@ -42,8 +42,9 @@ public class BookingOperations extends Utilities  {
             bookingRequest.setPhone(data.get("phone"));
             dates.setCheckin(data.get("checkin"));
             dates.setCheckout(data.get("checkout"));
+            bookingRequest.setBookingdates(dates);
             bookingRequest.setRoomid(roomid);
-
+            bookingRequest.setDepositpaid(false);
         }
 
         response = requestSetup()
